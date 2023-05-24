@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.immortal.jinfeng.access.UserinfoMapper">
+  <resultMap id="BaseResultMap" type="com.immortal.jinfeng.entity.Userinfo">
+    <id column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="phone" jdbcType="CHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="file_names" jdbcType="VARCHAR" property="fileNames" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uid, username, password, name, birthday, create_date, update_date, sex, phone, address, 
+    pic, token, file_names
+  </sql>
+
+
+  <select id="checkName" parameterType="string" resultType="boolean">
+    select count(uid)
+    from userinfo
+    where username = #{username};
+  </select>
+
+  <select id="verify" parameterType="string" resultType="boolean">
+    select count(uid)
+    from userinfo
+    where token = #{token};
+  </select>
+
+  <select id="getUserAmount" resultType="int">
+    select count(uid)
+    from userinfo
+  </select>
+
+  <select id="checkUid" resultType="boolean">
+    select count(uid)
+    from userinfo
+    where uid = #{uid}
+  </select>
+
+  <select id="getUserinfoList" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from userinfo
+    <where>
+      <if test="name != null">
+        and name like concat('%',#{name},'%')
+      </if>
+      <if test="sex != null">
+        and sex = #{sex}
+      </if>
+    </where>
+    order by uid asc
+    limit #{state},#{num}
+  </select>
+
+  <select id="selectByUsername" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from userinfo
+    where username = #{username}
+  </select>
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from userinfo
+    where uid = #{uid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from userinfo
+    where uid = #{uid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.immortal.jinfeng.entity.Userinfo">
+    insert into userinfo (uid, username, password, 
+      name, birthday, create_date, 
+      update_date, sex, phone, 
+      address, pic, token, 
+      file_names)
+    values (#{uid,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{sex,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, 
+      #{address,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
+      #{fileNames,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.immortal.jinfeng.entity.Userinfo">
+    insert into userinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="pic != null">
+        pic,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="fileNames != null">
+        file_names,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNames != null">
+        #{fileNames,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.immortal.jinfeng.entity.Userinfo">
+    update userinfo
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNames != null">
+        file_names = #{fileNames,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uid = #{uid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.immortal.jinfeng.entity.Userinfo">
+    update userinfo
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=CHAR},
+      address = #{address,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      file_names = #{fileNames,jdbcType=VARCHAR}
+    where uid = #{uid,jdbcType=BIGINT}
+  </update>
+</mapper>

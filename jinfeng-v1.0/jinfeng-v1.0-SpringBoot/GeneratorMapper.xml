@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!-- 指定连接数据库的JDBC驱动，指定到本机的完整路径（可以指定到maven仓库中的jar路径） -->
+    <classPathEntry
+            location="F:\Maven\repository\mysql\mysql-connector-java\8.0.16\mysql-connector-java-8.0.16.jar"/>
+
+    <!-- 配置table表信息内容体，targetRuntime指定采用mybatis3的版本 -->
+    <context id="my" targetRuntime="MyBatis3">
+
+        <!-- 抑制生成注释，由于生成的注释都是英文版的，可以不让它生成 -->
+        <commentGenerator>
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 配置数据库连接信息 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/jinfeng?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8"
+        userId="root"
+        password="Liulieer@2021">
+        <!--因为数据库中存在多表 user 因此需要在 url 中指定对应的关系表，同时添加上条配置信息来确保生成自己指定的表的实体。-->
+        <property name="nullCatalogMeansCurrent" value="true"/>
+    </jdbcConnection>
+
+    <!-- 生成model类，targetPackage指定model类的包名，targetProject指定生成的model放在哪个工程中 -->
+    <javaModelGenerator targetPackage="com.immortal.jinfeng.entity"
+    targetProject="src/main/java">
+    <property name="enableSubPackages" value="true"/>
+    <property name="trimStrings" value="true"/>
+</javaModelGenerator>
+
+        <!-- 生成mybatis的mapper.xml文件，targetPackage指定mapper.xml的包名，targetProject指定mapper.xml在哪个工程目录下【注意不要和接口放在同一个包下，可以指定在接口包的子包里面，如com.newboy.dao.mapper】 -->
+<sqlMapGenerator targetPackage="com.immortal.jinfeng.access.mapper"
+        targetProject="src/main/java">
+<property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成mybatis的Mapper接口类文件，targetPackage指定Mapper接口类文件的包名，targetProject指定Mapper接口类在哪个工程目录下 -->
+<javaClientGenerator targetPackage="com.immortal.jinfeng.access"
+        targetProject="src/main/java"
+        type="XMLMAPPER">
+<property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+<!--        <table tableName="userinfo"-->
+<!--               enableCountByExample="false" enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false" enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"/>-->
+
+        <!-- 数据库表以及对应的java模型类名（如果是多个表的话，可以复制多份然后修改成对应的表以及需要生成的模型名） -->
+<!--<table tableName="student" domainObjectName="Student" mapperName="StudentDao"-->
+<!--       enableCountByExample="false" enableUpdateByExample="false"-->
+<!--       enableDeleteByExample="false" enableSelectByExample="false"-->
+<!--       selectByExampleQueryId="false">-->
+<!--&lt;!&ndash;<columnRenamingRule searchString="^D_"-->
+<!--                    replaceString=""/>&ndash;&gt;-->
+<!--</table>-->
+
+<!--         如果要生成全部表，则如下-->
+        <table tableName="%" enableCountByExample="false"
+        enableUpdateByExample="false" enableDeleteByExample="false"
+        enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        </context>
+        </generatorConfiguration>
